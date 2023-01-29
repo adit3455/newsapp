@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/models/news_model.dart';
-import 'package:news_app/screens/allnews_screen.dart';
-import 'package:news_app/screens/category_screen.dart';
 import 'package:news_app/screens/export_screens.dart';
 import '../widgets/export_widgets.dart';
 
@@ -55,8 +53,8 @@ class AppNavigationConfig {
             builder: (context) => const AllNewsScreen());
       case '/login':
         return MaterialPageRoute(
-            settings: const RouteSettings(name: LoginScreen.routeName),
-            builder: (context) => const LoginScreen());
+            settings: const RouteSettings(name: AuthScreen.routeName),
+            builder: (context) => const AuthScreen());
 
       default:
         return _errorRoute();
@@ -65,16 +63,7 @@ class AppNavigationConfig {
 
   static Route _errorRoute() {
     return MaterialPageRoute(
-      settings: const RouteSettings(name: '/error'),
-      builder: (_) => Scaffold(
-        appBar: AppBar(title: const Text("Error Screen")),
-        body: Center(
-          child: Text(
-            "Theres Something Error",
-            style: Theme.of(_).textTheme.headline1,
-          ),
-        ),
-      ),
-    );
+        settings: const RouteSettings(name: '/error'),
+        builder: (_) => const ErrorScreen());
   }
 }

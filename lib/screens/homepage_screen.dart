@@ -24,6 +24,8 @@ class HomePage extends StatelessWidget {
       {"icon": Icons.table_chart_outlined, "label": "Technology"},
     ];
 
+    List<double> loadingIndex = [150.0, 200.0, 500.0];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("PenNews"),
@@ -64,12 +66,10 @@ class HomePage extends StatelessWidget {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Column(
-                    children: [
-                      _cardLoading(context, height: 150),
-                      _cardLoading(context, height: 200),
-                      _cardLoading(context, height: 500)
-                    ],
-                  );
+                      children: List.generate(
+                          loadingIndex.length,
+                          (index) => _cardLoading(context,
+                              height: loadingIndex[index])));
                 }
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,7 +77,7 @@ class HomePage extends StatelessWidget {
                   children: [
                     const SizedBox(height: 8.0),
                     Text(
-                      "Hi Adit, ${GreetingConfig().greeting}!",
+                      "Hi ${GreetingConfig().name}, ${GreetingConfig().greeting}!",
                       style: Theme.of(context)
                           .textTheme
                           .headline6!

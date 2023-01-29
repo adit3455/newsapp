@@ -7,4 +7,6 @@ export 'user_screen.dart';
 export 'newsdetail_screen.dart';
 export 'error_screen.dart';
 export 'bookmark_screen.dart';
-export 'loginscreen.dart';
+export 'auth_screen.dart';
+export 'allnews_screen.dart';
+export 'category_screen.dart';
