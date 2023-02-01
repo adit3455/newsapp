@@ -23,7 +23,6 @@ class HomePage extends StatelessWidget {
       {"icon": Icons.sports_baseball_outlined, "label": "Sport"},
       {"icon": Icons.table_chart_outlined, "label": "Technology"},
     ];
-
     List<double> loadingIndex = [150.0, 200.0, 500.0];
 
     return Scaffold(
@@ -58,137 +57,146 @@ class HomePage extends StatelessWidget {
         ],
       ),
       drawer: const CustomDrawerWidget(),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: SingleChildScrollView(
-          child: FutureBuilder<List<Articles>>(
-              future: NewsRepository().getAllArticlesCategory(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+      body: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is UnAuthentitcated) {
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/login', (route) => false);
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: SingleChildScrollView(
+            child: FutureBuilder<List<Articles>>(
+                future: NewsRepository().getAllArticlesCategory(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Column(
+                        children: List.generate(
+                            loadingIndex.length,
+                            (index) => _cardLoading(context,
+                                height: loadingIndex[index])));
+                  }
                   return Column(
-                      children: List.generate(
-                          loadingIndex.length,
-                          (index) => _cardLoading(context,
-                              height: loadingIndex[index])));
-                }
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(height: 8.0),
-                    Text(
-                      "Hi ${GreetingConfig().name}, ${GreetingConfig().greeting}!",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6!
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    const Divider(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Hottest News",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6!
-                              .copyWith(fontWeight: FontWeight.w400),
-                        ),
-                        TextButton(
-                          onPressed: () =>
-                              Navigator.pushNamed(context, '/allNews'),
-                          child: const Text("See More"),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 10.0),
-                    FutureBuilder<List<Articles>>(
-                        future: NewsRepository().getHotNews(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return _cardLoading(context, height: 150);
-                          } else if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            return CarouselSlider(
-                              options: CarouselOptions(
-                                aspectRatio: 1.3,
-                                viewportFraction: 0.92,
-                                height: 200,
-                                enlargeCenterPage: true,
-                                enableInfiniteScroll: false,
-                                enlargeStrategy: CenterPageEnlargeStrategy.zoom,
-                                initialPage: 0,
-                                autoPlay: true,
-                              ),
-                              items: snapshot.data!
-                                  .map((e) => CarouselNewsCardWidget(
-                                        articles: e,
-                                      ))
-                                  .toList(),
-                            );
-                          } else {
-                            return const Text("Theres Something Wrong");
-                          }
-                        }),
-                    Text(
-                      "News Category",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6!
-                          .copyWith(fontWeight: FontWeight.w400),
-                    ),
-                    const SizedBox(height: 8.0),
-                    Center(
-                      child: Wrap(
-                          runSpacing: 10.0,
-                          spacing: 10.0,
-                          alignment: WrapAlignment.spaceBetween,
-                          crossAxisAlignment: WrapCrossAlignment.start,
-                          children: List.generate(
-                              categoryCard.length,
-                              (index) => CategoryCardWidget(
-                                  categoryRepo: categoryCard[index]['label']
-                                      .toString()
-                                      .toLowerCase(),
-                                  label: categoryCard[index]['label'],
-                                  icon: categoryCard[index]['icon']))),
-                    ),
-                    const SizedBox(height: 12.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Recommendation",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6!
-                              .copyWith(fontWeight: FontWeight.w400),
-                        ),
-                        TextButton(
-                          onPressed: () => Navigator.pushNamed(
-                              context, '/allNews',
-                              arguments: snapshot.data),
-                          child: const Text("See More"),
-                        ),
-                      ],
-                    ),
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: 7,
-                        itemBuilder: (context, index) {
-                          return RecomendationCardWidget(
-                            articles: snapshot.data![index],
-                          );
-                        },
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 8.0),
+                      Text(
+                        "Hi ${GreetingConfig().name}, ${GreetingConfig().greeting}!",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6!
+                            .copyWith(fontWeight: FontWeight.bold),
                       ),
-                    ),
-                  ],
-                );
-              }),
+                      const Divider(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Hottest News",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline6!
+                                .copyWith(fontWeight: FontWeight.w400),
+                          ),
+                          TextButton(
+                            onPressed: () =>
+                                Navigator.pushNamed(context, '/allNews'),
+                            child: const Text("See More"),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 10.0),
+                      FutureBuilder<List<Articles>>(
+                          future: NewsRepository().getHotNews(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return _cardLoading(context, height: 150);
+                            } else if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              return CarouselSlider(
+                                options: CarouselOptions(
+                                  aspectRatio: 1.3,
+                                  viewportFraction: 0.92,
+                                  height: 200,
+                                  enlargeCenterPage: true,
+                                  enableInfiniteScroll: false,
+                                  enlargeStrategy:
+                                      CenterPageEnlargeStrategy.zoom,
+                                  initialPage: 0,
+                                  autoPlay: true,
+                                ),
+                                items: snapshot.data!
+                                    .map((e) => CarouselNewsCardWidget(
+                                          articles: e,
+                                        ))
+                                    .toList(),
+                              );
+                            } else {
+                              return const Text("Theres Something Wrong");
+                            }
+                          }),
+                      Text(
+                        "News Category",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6!
+                            .copyWith(fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(height: 8.0),
+                      Center(
+                        child: Wrap(
+                            runSpacing: 10.0,
+                            spacing: 10.0,
+                            alignment: WrapAlignment.spaceBetween,
+                            crossAxisAlignment: WrapCrossAlignment.start,
+                            children: List.generate(
+                                categoryCard.length,
+                                (index) => CategoryCardWidget(
+                                    categoryRepo: categoryCard[index]['label']
+                                        .toString()
+                                        .toLowerCase(),
+                                    label: categoryCard[index]['label'],
+                                    icon: categoryCard[index]['icon']))),
+                      ),
+                      const SizedBox(height: 12.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Recommendation",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline6!
+                                .copyWith(fontWeight: FontWeight.w400),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pushNamed(
+                                context, '/allNews',
+                                arguments: snapshot.data),
+                            child: const Text("See More"),
+                          ),
+                        ],
+                      ),
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: 7,
+                          itemBuilder: (context, index) {
+                            return RecomendationCardWidget(
+                              articles: snapshot.data![index],
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                }),
+          ),
         ),
       ),
     );

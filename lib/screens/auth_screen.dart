@@ -1,7 +1,7 @@
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter/material.dart';
 import 'package:gif_view/gif_view.dart';
-import 'package:news_app/utils/appcolors_utils.dart';
+import 'package:news_app/utils/app_utils.dart';
 
 import '../blocs/export_blocs.dart';
 
@@ -17,9 +17,9 @@ class AuthScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: AppColors.loginBackgroundColor,
+      backgroundColor: AppUtils.loginBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.loginBackgroundColor,
+        backgroundColor: AppUtils.loginBackgroundColor,
         leading: const SizedBox(),
         centerTitle: true,
         title: const Text("Login Screen"),
@@ -27,11 +27,18 @@ class AuthScreen extends StatelessWidget {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is Authenticated) {
-            Navigator.pushReplacementNamed(context, '/main');
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/main', (route) => false);
           }
           if (state is AuthError) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(state.error)));
+          }
+          if (state is AuthRegistration) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text(
+                    "Registration has been completed try to Sign In in the Sign In Form")));
+            Navigator.pop(context);
           }
         },
         builder: (context, state) {
@@ -73,22 +80,20 @@ class AuthScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    BlocBuilder<ChangerBottomNavigationBarBloc,
-                        ChangerBottomNavigationBarState>(
+                    BlocBuilder<AuthChangerListBloc, AuthChangerListState>(
                       builder: (context, state) {
                         return Column(
                           children: [
                             FlashyTabBar(
-                              backgroundColor: AppColors.loginBackgroundColor,
-                              selectedIndex:
-                                  (state as ChangerBottomNavigationBarInitial)
-                                      .selectedIndex,
+                              backgroundColor: AppUtils.loginBackgroundColor,
+                              selectedIndex: (state as AuthChangerListInitial)
+                                  .selectedIndex,
                               shadows: const [],
                               showElevation: true,
                               onItemSelected: (value) {
                                 context
-                                    .read<ChangerBottomNavigationBarBloc>()
-                                    .add(OnSelectedIndex(value: value));
+                                    .read<AuthChangerListBloc>()
+                                    .add(OnSelectedIndexAuth(value: value));
                               },
                               items: [
                                 FlashyTabBarItem(
@@ -177,26 +182,34 @@ class AuthScreen extends StatelessWidget {
   }
 
   Column _tabBarRegister(BuildContext context) {
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+    TextEditingController nameController = TextEditingController();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Name', style: Theme.of(context).textTheme.bodyLarge),
-        TextFormField(),
+        TextFormField(controller: nameController),
         const SizedBox(
           height: 10.0,
         ),
         Text('Email', style: Theme.of(context).textTheme.bodyLarge),
-        TextFormField(),
+        TextFormField(controller: emailController),
         const SizedBox(height: 10.0),
         Text('Password', style: Theme.of(context).textTheme.bodyLarge),
-        TextFormField(),
+        TextFormField(controller: passwordController),
         const SizedBox(height: 20.0),
         Center(
             child: TextButton(
                 style: TextButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
                     padding: const EdgeInsets.all(10.0)),
-                onPressed: () {},
+                onPressed: () {
+                  context.read<AuthBloc>().add(SignUpWithEmailAndPassword(
+                      emailController.text,
+                      passwordController.text,
+                      nameController.text));
+                },
                 child: const Text(
                   "Register",
                   style: TextStyle(color: Colors.white, fontSize: 20.0),

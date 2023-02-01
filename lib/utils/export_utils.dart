@@ -1,2 +1,2 @@
-export 'appcolors_utils.dart';
+export 'app_utils.dart';
 export 'themedata_utils.dart';

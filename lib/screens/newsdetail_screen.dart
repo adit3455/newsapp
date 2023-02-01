@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/blocs/export_blocs.dart';
+import 'package:news_app/repositories/baserepositories.dart';
+import 'package:news_app/widgets/export_widgets.dart';
 
 import '../models/news_model.dart';
 
@@ -31,7 +34,11 @@ class NewsDetailScreen extends StatelessWidget {
                 children: [
                   Text("Posted ${articles.publishedAt}"),
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        context.read<WishlistBloc>().add(AddWishlist(articles));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Added to Wishlist")));
+                      },
                       icon: const Icon(Icons.bookmark_outline))
                 ],
               ),
@@ -70,57 +77,34 @@ class NewsDetailScreen extends StatelessWidget {
                       onPressed: () {}, icon: const Icon(Icons.share_outlined)),
                 ],
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.160,
-                width: MediaQuery.of(context).size.width,
-                child: MediaQuery.removePadding(
-                  removeTop: true,
-                  context: context,
-                  child: ListView.builder(
-                    itemCount: 10,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return Stack(
-                        children: [
-                          Container(
-                            width: 150,
-                            height: 200,
-                            margin: const EdgeInsets.all(5.0),
-                            decoration: const BoxDecoration(
-                                image: DecorationImage(
-                              image: NetworkImage(
-                                  "https://guardian.ng/wp-content/uploads/2016/03/Real-Estate1.jpg"),
-                            )),
+              FutureBuilder<List<Articles>>(
+                  future: NewsRepository().getHotNews(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.done) {
+                      return SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.160,
+                        width: MediaQuery.of(context).size.width,
+                        child: MediaQuery.removePadding(
+                          removeTop: true,
+                          context: context,
+                          child: ListView.builder(
+                            itemCount: 10,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              return RecomendationDetailScreenWidget(
+                                articles: snapshot.data![index],
+                              );
+                            },
                           ),
-                          Positioned(
-                              left: MediaQuery.of(context).size.width * 0.02,
-                              top: MediaQuery.of(context).size.height * 0.12,
-                              child: Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.5,
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Theme.of(context).shadowColor,
-                                          blurRadius: 22.0,
-                                          offset: const Offset(0.4, 0.25))
-                                    ],
-                                  ),
-                                  child: Text(
-                                    '''What is Simple''',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1!
-                                        .copyWith(
-                                            fontSize: 12.0,
-                                            color: Colors.white),
-                                  ))),
-                        ],
+                        ),
                       );
-                    },
-                  ),
-                ),
-              )
+                    } else {
+                      return const Text("Theres Something Wrong");
+                    }
+                  })
             ],
           ),
         ),

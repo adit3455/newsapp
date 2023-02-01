@@ -34,11 +34,6 @@ class CustomDrawerWidget extends StatelessWidget {
             onTap: () {},
           ),
           ListTile(
-            leading: const Icon(Icons.privacy_tip),
-            title: const Text("Privacy Policy"),
-            onTap: () {},
-          ),
-          ListTile(
             leading: const Icon(Icons.settings),
             title: const Text("Settings"),
             onTap: () => Navigator.pushNamed(context, '/setting'),

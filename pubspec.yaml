@@ -29,7 +29,6 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  anim_search_bar: ^2.0.3
   card_loading: ^0.2.2
   carousel_slider: ^4.2.1
   cupertino_icons: ^1.0.2
@@ -43,7 +42,6 @@ dependencies:
   flutter_bloc: ^8.1.1
   flutter_switch: ^0.3.2
   gif_view: ^0.3.1
-  intl: ^0.17.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0

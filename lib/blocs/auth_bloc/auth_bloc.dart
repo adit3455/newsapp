@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:news_app/blocs/export_blocs.dart';
 import 'package:news_app/repositories/baseauth_repository.dart';
 
 part 'auth_event.dart';
@@ -13,6 +14,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SignUpRequested>(_onSignupRequested);
     on<GoogleSignInRequested>(_onGoogleSignInRequested);
     on<SignOutRequested>(_onSignOutRequested);
+    on<SignUpWithEmailAndPassword>(_onSignUpWithEmailAndPassword);
   }
 
   void _onSigninRequested(
@@ -47,5 +49,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(Loading());
     await authRepository.signOut();
     emit(UnAuthentitcated());
+  }
+
+  void _onSignUpWithEmailAndPassword(
+      SignUpWithEmailAndPassword event, Emitter<AuthState> emit) {
+    try {
+      authRepository.signUpWithEmailAndPassword(
+          email: event.email, password: event.password, name: event.name);
+      authRepository.signOut();
+      emit(AuthRegistration());
+      emit(UnAuthentitcated());
+    } catch (e) {
+      emit(
+        AuthError(e.toString()),
+      );
+    }
   }
 }

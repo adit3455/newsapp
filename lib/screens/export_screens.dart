@@ -2,7 +2,7 @@ export 'homepage_screen.dart';
 export 'setting_screen.dart';
 export 'newsdetail_screen.dart';
 export 'search_screen.dart';
-export 'edit_user_screen.dart';
+export 'edituser_screen.dart';
 export 'user_screen.dart';
 export 'newsdetail_screen.dart';
 export 'error_screen.dart';

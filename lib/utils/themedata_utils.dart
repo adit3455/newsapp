@@ -25,11 +25,11 @@ class ThemeDataChanger {
           offset: const Offset(0, 3), // changes position of shadow
         ),
       ]),
-      backgroundColor: AppColors.lightBackgroundColor,
+      backgroundColor: AppUtils.lightBackgroundColor,
     ),
     brightness: Brightness.light,
     primarySwatch: Colors.blue,
-    scaffoldBackgroundColor: AppColors.lightBackgroundColor,
+    scaffoldBackgroundColor: AppUtils.lightBackgroundColor,
   );
 
   static final darkTheme = ThemeData(
@@ -52,11 +52,11 @@ class ThemeDataChanger {
           offset: const Offset(0, 3), // changes position of shadow
         ),
       ]),
-      backgroundColor: AppColors.darkBackgroundColor,
+      backgroundColor: AppUtils.darkBackgroundColor,
     ),
     brightness: Brightness.dark,
     iconTheme: const IconThemeData(color: Colors.white),
     primarySwatch: Colors.purple,
-    scaffoldBackgroundColor: AppColors.darkBackgroundColor,
+    scaffoldBackgroundColor: AppUtils.darkBackgroundColor,
   );
 }

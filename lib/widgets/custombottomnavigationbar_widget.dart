@@ -7,6 +7,10 @@ class CustomBottomNavigationWidget extends StatelessWidget {
   static const String routeName = '/main';
   const CustomBottomNavigationWidget({super.key});
 
+  Future<bool> _onWillPop() async {
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
@@ -15,38 +19,42 @@ class CustomBottomNavigationWidget extends StatelessWidget {
       const BookmarkScreen(),
       const UserScreen()
     ];
+
     return BlocBuilder<ChangerBottomNavigationBarBloc,
         ChangerBottomNavigationBarState>(
       builder: (context, state) {
-        return Scaffold(
-          body:
-              pages[(state as ChangerBottomNavigationBarInitial).selectedIndex],
-          bottomNavigationBar: FlashyTabBar(
-            selectedIndex: state.selectedIndex,
-            showElevation: true,
-            onItemSelected: (value) {
-              context
-                  .read<ChangerBottomNavigationBarBloc>()
-                  .add(OnSelectedIndex(value: value));
-            },
-            items: [
-              FlashyTabBarItem(
-                icon: const Icon(Icons.home),
-                title: const Text('Home'),
-              ),
-              FlashyTabBarItem(
-                icon: const Icon(Icons.search),
-                title: const Text('Search'),
-              ),
-              FlashyTabBarItem(
-                icon: const Icon(Icons.bookmark),
-                title: const Text('Bookmark'),
-              ),
-              FlashyTabBarItem(
-                icon: const Icon(Icons.person),
-                title: const Text('User'),
-              ),
-            ],
+        return WillPopScope(
+          onWillPop: _onWillPop,
+          child: Scaffold(
+            body: pages[
+                (state as ChangerBottomNavigationBarInitial).selectedIndex],
+            bottomNavigationBar: FlashyTabBar(
+              selectedIndex: state.selectedIndex,
+              showElevation: true,
+              onItemSelected: (value) {
+                context
+                    .read<ChangerBottomNavigationBarBloc>()
+                    .add(OnSelectedIndex(value: value));
+              },
+              items: [
+                FlashyTabBarItem(
+                  icon: const Icon(Icons.home),
+                  title: const Text('Home'),
+                ),
+                FlashyTabBarItem(
+                  icon: const Icon(Icons.search),
+                  title: const Text('Search'),
+                ),
+                FlashyTabBarItem(
+                  icon: const Icon(Icons.bookmark),
+                  title: const Text('Bookmark'),
+                ),
+                FlashyTabBarItem(
+                  icon: const Icon(Icons.person),
+                  title: const Text('User'),
+                ),
+              ],
+            ),
           ),
         );
       },
