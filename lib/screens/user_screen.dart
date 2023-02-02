@@ -47,24 +47,11 @@ class UserScreen extends StatelessWidget {
                     child: CircleAvatar(
                       backgroundColor: Theme.of(context).hintColor,
                       radius: 58.0,
-                      backgroundImage: const NetworkImage(
-                          "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fA%3D%3D&w=1000&q=80"),
-                      child: Stack(
-                        children: [
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: CircleAvatar(
-                                radius: 18,
-                                backgroundColor: Theme.of(context).cardColor,
-                                child: const Icon(Icons
-                                    .camera_alt_outlined) // change this children
-                                ),
-                          )
-                        ],
-                      ),
+                      backgroundImage:
+                          NetworkImage("${GreetingConfig().getPhoto()}"),
                     ),
                   ),
-                  const SizedBox(height: 20.0),
+                  const SizedBox(height: 25.0),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: List.generate(
@@ -107,24 +94,28 @@ class UserScreen extends StatelessWidget {
         ],
       );
 
-  InkWell _buttonUser(BuildContext context,
+  Material _buttonUser(BuildContext context,
           {required void Function()? function, required String label}) =>
-      InkWell(
-        onTap: function,
-        child: Container(
-          padding: const EdgeInsets.all(10.0),
-          decoration: BoxDecoration(
-              border: Border.all(width: 1),
-              color: Theme.of(context).backgroundColor,
-              borderRadius: BorderRadius.circular(20.0)),
-          width: 120,
-          height: 50,
-          child: Center(
-            child: Text(label,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1!
-                    .copyWith(fontWeight: FontWeight.w500)),
+      Material(
+        borderRadius: BorderRadius.circular(20.0),
+        color: Theme.of(context).backgroundColor,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20.0),
+          onTap: function,
+          child: Container(
+            padding: const EdgeInsets.all(10.0),
+            decoration: BoxDecoration(
+                border: Border.all(width: 1),
+                borderRadius: BorderRadius.circular(20.0)),
+            width: 120,
+            height: 50,
+            child: Center(
+              child: Text(label,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(fontWeight: FontWeight.w500)),
+            ),
           ),
         ),
       );

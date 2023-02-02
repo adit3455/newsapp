@@ -20,18 +20,17 @@ class CustomDrawerWidget extends StatelessWidget {
             accountEmail: Text(auth.currentUser?.isAnonymous == true
                 ? "Anonymous"
                 : "${auth.currentUser!.email}"),
-            currentAccountPicture: const CircleAvatar(
-              backgroundImage: NetworkImage(
-                  "https://images.unsplash.com/photo-1600486913747-55e5470d6f40?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"),
+            currentAccountPicture: CircleAvatar(
+              backgroundImage: NetworkImage("${GreetingConfig().getPhoto()}"),
             ),
             decoration: BoxDecoration(
               color: Colors.blueGrey[900],
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.code),
-            title: const Text("About"),
-            onTap: () {},
+            leading: const Icon(Icons.person),
+            title: const Text("Edit User"),
+            onTap: () => Navigator.pushNamed(context, "/editUser"),
           ),
           ListTile(
             leading: const Icon(Icons.settings),

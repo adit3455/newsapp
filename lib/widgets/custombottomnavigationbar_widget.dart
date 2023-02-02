@@ -40,18 +40,26 @@ class CustomBottomNavigationWidget extends StatelessWidget {
                 FlashyTabBarItem(
                   icon: const Icon(Icons.home),
                   title: const Text('Home'),
+                  activeColor:
+                      Theme.of(context).appBarTheme.titleTextStyle!.color!,
                 ),
                 FlashyTabBarItem(
                   icon: const Icon(Icons.search),
                   title: const Text('Search'),
+                  activeColor:
+                      Theme.of(context).appBarTheme.titleTextStyle!.color!,
                 ),
                 FlashyTabBarItem(
                   icon: const Icon(Icons.bookmark),
                   title: const Text('Bookmark'),
+                  activeColor:
+                      Theme.of(context).appBarTheme.titleTextStyle!.color!,
                 ),
                 FlashyTabBarItem(
                   icon: const Icon(Icons.person),
                   title: const Text('User'),
+                  activeColor:
+                      Theme.of(context).appBarTheme.titleTextStyle!.color!,
                 ),
               ],
             ),

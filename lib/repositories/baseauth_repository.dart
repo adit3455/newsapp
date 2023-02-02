@@ -54,8 +54,6 @@ class BaseAuth {
       await auth.createUserWithEmailAndPassword(
           email: email, password: password);
       await auth.currentUser?.updateDisplayName(name);
-      await auth.currentUser?.updatePhotoURL(
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');

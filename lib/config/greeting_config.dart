@@ -24,6 +24,13 @@ class GreetingConfig {
     return null;
   }
 
+  getPhoto() {
+    if (auth?.photoURL == null) {
+      return "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png";
+    }
+    return auth!.photoURL;
+  }
+
   String? _getNameDrawer() {
     if (auth?.isAnonymous == true) {
       return 'Anonymous';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/config/greeting_config.dart';
 
 class EditUserScreen extends StatelessWidget {
   static const String routeName = '/editUser';
@@ -22,8 +23,8 @@ class EditUserScreen extends StatelessWidget {
                 child: CircleAvatar(
                   backgroundColor: Theme.of(context).hintColor,
                   radius: 58.0,
-                  backgroundImage: const NetworkImage(
-                      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fA%3D%3D&w=1000&q=80"),
+                  backgroundImage:
+                      NetworkImage("${GreetingConfig().getPhoto()}"),
                   child: Stack(
                     children: [
                       Align(
@@ -82,21 +83,29 @@ class EditUserScreen extends StatelessWidget {
               ),
               const SizedBox(height: 40.0),
               Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).backgroundColor,
-                      borderRadius: BorderRadius.circular(20.0)),
-                  width: 120,
-                  height: 50,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          "Log out",
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
-                        const Icon(Icons.logout)
-                      ]),
+                child: Material(
+                  color: Theme.of(context).backgroundColor,
+                  borderRadius: BorderRadius.circular(20.0),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(20.0),
+                    onTap: () {},
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 1),
+                          borderRadius: BorderRadius.circular(20.0)),
+                      width: 120,
+                      height: 50,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              "Log out",
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                            const Icon(Icons.logout)
+                          ]),
+                    ),
+                  ),
                 ),
               )
             ],

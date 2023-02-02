@@ -19,7 +19,7 @@ class RecomendationCardWidget extends StatelessWidget {
         "${articles.urlToImage}",
         height: 200,
         width: 100,
-        fit: BoxFit.scaleDown,
+        fit: BoxFit.fitWidth,
       ),
       title: Text("${articles.title}"),
       subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
