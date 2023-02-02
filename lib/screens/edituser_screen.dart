@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/config/greeting_config.dart';
+import 'package:news_app/repositories/baseauth_repository.dart';
 
 class EditUserScreen extends StatelessWidget {
   static const String routeName = '/editUser';
@@ -7,6 +9,9 @@ class EditUserScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController nameController = TextEditingController();
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -45,12 +50,20 @@ class EditUserScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Adit Prasetia Putra",
+                  Text("${GreetingConfig().nameDrawer}",
                       style: Theme.of(context).textTheme.titleLarge),
                   IconButton(
                       onPressed: () {
-                        _customModalBottomSheet(context,
-                            label: "Edit Your Name");
+                        _customModalBottomSheet(
+                          context,
+                          textEditingController: nameController,
+                          label: "Edit Your Name",
+                          onPressed: () {
+                            BaseAuth().updateUserName(
+                                updateName: nameController.text);
+                            Navigator.pop(context);
+                          },
+                        );
                       },
                       icon: const Icon(Icons.edit))
                 ],
@@ -60,12 +73,19 @@ class EditUserScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("aditprasetya566@gmail.com",
+                  Text("${FirebaseAuth.instance.currentUser!.email}",
                       style: Theme.of(context).textTheme.titleLarge),
                   IconButton(
                       onPressed: () {
-                        _customModalBottomSheet(context,
-                            label: "Edit Your Email");
+                        _customModalBottomSheet(
+                          context,
+                          textEditingController: emailController,
+                          label: "Edit Your Email",
+                          onPressed: () {
+                            BaseAuth()
+                                .updateEmail(updateEmail: emailController.text);
+                          },
+                        );
                       },
                       icon: const Icon(Icons.edit))
                 ],
@@ -78,7 +98,19 @@ class EditUserScreen extends StatelessWidget {
                 children: [
                   Text("********",
                       style: Theme.of(context).textTheme.titleLarge),
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.edit))
+                  IconButton(
+                      onPressed: () {
+                        _customModalBottomSheet(
+                          context,
+                          label: "password",
+                          textEditingController: passController,
+                          onPressed: () {
+                            BaseAuth().updatePassword(
+                                updatePassword: passController.text);
+                          },
+                        );
+                      },
+                      icon: const Icon(Icons.edit))
                 ],
               ),
               const SizedBox(height: 40.0),
@@ -115,8 +147,12 @@ class EditUserScreen extends StatelessWidget {
     );
   }
 
-  Future<dynamic> _customModalBottomSheet(BuildContext context,
-      {required String label}) {
+  Future<dynamic> _customModalBottomSheet(
+    BuildContext context, {
+    required String label,
+    required textEditingController,
+    void Function()? onPressed,
+  }) {
     return showModalBottomSheet(
         backgroundColor: Colors.transparent,
         context: context,
@@ -144,7 +180,7 @@ class EditUserScreen extends StatelessWidget {
                           .copyWith(fontWeight: FontWeight.w500),
                     ),
                     const SizedBox(height: 10.0),
-                    const TextField(),
+                    TextField(controller: textEditingController),
                     const SizedBox(height: 10.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -152,7 +188,8 @@ class EditUserScreen extends StatelessWidget {
                         TextButton(
                             onPressed: () => Navigator.pop(context),
                             child: const Text("Cancel")),
-                        TextButton(onPressed: () {}, child: const Text("Save")),
+                        TextButton(
+                            onPressed: onPressed, child: const Text("Save")),
                       ],
                     )
                   ],

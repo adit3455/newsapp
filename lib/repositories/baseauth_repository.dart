@@ -65,6 +65,30 @@ class BaseAuth {
     }
   }
 
+  Future<void> updateUserName({required String? updateName}) async {
+    try {
+      _firebaseAuth.currentUser?.updateDisplayName(updateName);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<void> updateEmail({required String updateEmail}) async {
+    try {
+      await _firebaseAuth.currentUser?.updateEmail(updateEmail);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<void> updatePassword({required String updatePassword}) async {
+    try {
+      await _firebaseAuth.currentUser?.updatePassword(updatePassword);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<void> signInWithGoogle() async {
     // try {
     //   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
